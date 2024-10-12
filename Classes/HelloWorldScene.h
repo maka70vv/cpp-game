@@ -37,7 +37,16 @@ class GameState
     void reset()
     {
         shipPos = Vec2(300, 300);
-        bkgPos = Vec2(0, 0);
+        bkgPos = Vec2(1060, 350);
+    }
+
+    void moveBkg(float x)
+    {
+        bkgPos.x = bkgPos.x - x;
+        if (bkgPos.x < 0)
+        {
+            bkgPos.x += 1060;
+        }
     }
 };
 

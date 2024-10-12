@@ -54,8 +54,7 @@ bool HelloWorld::init()
 
     shipPtr =Sprite::create("ship.png");
 
-    GameSingleton::getInstance().getState().shipPos = Vec2(300, 300);
-    GameSingleton::getInstance().getState().bkgPos = Vec2(0, 0);
+    GameSingleton::getInstance().getState().reset();
 
     shipPtr->setPosition(300, 300);
     this->addChild(shipPtr, 2);
@@ -94,7 +93,9 @@ void HelloWorld::onMouseDown(cocos2d::Event* event)
 
 void HelloWorld::update(float delta)
 {
-    GameSingleton::getInstance().getState().bkgPos.x = GameSingleton::getInstance().getState().bkgPos.x - 80 * delta;
+    // GameSingleton::getInstance().getState().bkgPos.x = GameSingleton::getInstance().getState().bkgPos.x - 80 * delta;
+
+    GameSingleton::getInstance().getState().moveBkg(80*delta);
 
     SetAllPositions();
 }
