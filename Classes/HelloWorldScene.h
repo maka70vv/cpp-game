@@ -72,7 +72,8 @@ public:
     void onMouseMove(Event* event);
 
     void update(float delta) override;
-    
+    void SetAllPositions();
+
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
 };

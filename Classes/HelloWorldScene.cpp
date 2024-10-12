@@ -79,20 +79,19 @@ void HelloWorld::onMouseMove(cocos2d::Event* event)
 {
     cocos2d::EventMouse* mouseEvent = (cocos2d::EventMouse*)event;
 
-    float x = mouseEvent->getCursorX();
-    float y = mouseEvent->getCursorY();
+    GameSingleton::getInstance().getState().shipPos.y = mouseEvent->getCursorY();
 
-    shipPtr->setPosition(300, y);
+    SetAllPositions();
 }
 
 void HelloWorld::update(float delta)
 {
-    std::cout << "delta: " << delta << std::endl;
+    GameSingleton::getInstance().getState().bkgPos.x = GameSingleton::getInstance().getState().bkgPos.x - 80 * delta;
 
-    float bkg_x = backgroundPtr->getPositionX();
-    float bkg_y = backgroundPtr->getPositionY();
+    SetAllPositions();
+}
 
-    bkg_x -= 80*delta;
-
-    backgroundPtr->setPosition(bkg_x, bkg_y);
+void HelloWorld::SetAllPositions(){
+    shipPtr->setPosition(GameSingleton::getInstance().getState().shipPos);
+    backgroundPtr->setPosition(GameSingleton::getInstance().getState().bkgPos);
 }
