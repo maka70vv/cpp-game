@@ -63,6 +63,7 @@ bool HelloWorld::init()
     mouseListener = EventListenerMouse::create();
 
     mouseListener->onMouseMove = CC_CALLBACK_1(HelloWorld::onMouseMove, this);
+    mouseListener->onMouseDown = CC_CALLBACK_1(HelloWorld::onMouseDown, this);
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
 
@@ -80,6 +81,13 @@ void HelloWorld::onMouseMove(cocos2d::Event* event)
     cocos2d::EventMouse* mouseEvent = (cocos2d::EventMouse*)event;
 
     GameSingleton::getInstance().getState().shipPos.y = mouseEvent->getCursorY();
+
+    SetAllPositions();
+}
+
+void HelloWorld::onMouseDown(cocos2d::Event* event)
+{
+    GameSingleton::getInstance().getState().reset();
 
     SetAllPositions();
 }

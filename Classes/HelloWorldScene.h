@@ -33,6 +33,12 @@ class GameState
     public:
         Vec2 shipPos;
         Vec2 bkgPos;
+
+    void reset()
+    {
+        shipPos = Vec2(300, 300);
+        bkgPos = Vec2(0, 0);
+    }
 };
 
 class GameSingleton
@@ -70,6 +76,7 @@ public:
     EventListenerMouse* mouseListener;
 
     void onMouseMove(Event* event);
+    void onMouseDown(Event* event);
 
     void update(float delta) override;
     void SetAllPositions();
