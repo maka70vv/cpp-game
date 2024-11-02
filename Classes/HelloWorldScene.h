@@ -26,18 +26,22 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
+#include <vector>
+
 using namespace cocos2d;
 
 class GameState
 {
-    public:
-        Vec2 shipPos;
-        Vec2 bkgPos;
+public:
+    cocos2d::Vec2 shipPos;
+    cocos2d::Vec2 bkgPos;
+    std::vector<cocos2d::Vec2> objectPos;
+
 
     void reset()
     {
-        shipPos = Vec2(300, 300);
-        bkgPos = Vec2(1060, 350);
+        shipPos = cocos2d::Vec2(300, 300);
+        bkgPos = cocos2d::Vec2(1325, 400);
     }
 
     void moveBkg(float x)
@@ -45,53 +49,64 @@ class GameState
         bkgPos.x = bkgPos.x - x;
         if (bkgPos.x < 0)
         {
-            bkgPos.x += 1060;
+            bkgPos.x += 1325;
+        }
+    }
+
+    void moveObjectPos(float x)
+    {
+        for (auto& obj : objectPos)
+        {
+            obj.x = obj.x - x;
         }
     }
 };
 
 class GameSingleton
 {
-    protected:
-        GameSingleton() {};
-        GameState currentState;
+protected:
+    GameSingleton() {}
 
-    public:
-        static GameSingleton& getInstance()
-        {
-            static GameSingleton instance;
-            return instance;
-        }
+    GameState currentState;
+public:
+    static GameSingleton& getInstance()
+    {
+        static GameSingleton instance;
 
-        GameState& getState()
-            {
-                return currentState;
-            }
+        return instance;
+    }
+
+    GameState& getState()
+    {
+        return currentState;
+    }
 };
 
-class HelloWorld : public Scene
+
+class HelloWorld : public cocos2d::Scene
 {
 public:
-    static Scene* createScene();
+    static cocos2d::Scene* createScene();
 
     virtual bool init();
 
-    Sprite* shipPtr;
-    Sprite* backgroundPtr;
-    
-    // a selector callback
-    // void menuCloseCallback(cocos2d::Ref* pSender);
+    cocos2d::Sprite* shipPtr;
+    cocos2d::Sprite* backgroundPtr;
+    std::vector<cocos2d::Sprite*> objectPtr;
 
-    EventListenerMouse* mouseListener;
-
-    void onMouseMove(Event* event);
-    void onMouseDown(Event* event);
-
-    void update(float delta) override;
-    void SetAllPositions();
+    double objectTimer = 0;
 
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
+
+    cocos2d::EventListenerMouse* mouseListener;
+
+    void onMouseMove(cocos2d::Event* event);
+    void onMouseDown(cocos2d::Event* event);
+
+    void update(float delta) override;
+
+    void SetAllPositions();
 };
 
 #endif // __HELLOWORLD_SCENE_H__

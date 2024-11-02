@@ -52,25 +52,30 @@ bool HelloWorld::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    shipPtr =Sprite::create("ship.png");
+    shipPtr = Sprite::create("ship.png");
 
     GameSingleton::getInstance().getState().reset();
-
-    shipPtr->setPosition(300, 300);
+   
+    
     this->addChild(shipPtr, 2);
 
     mouseListener = EventListenerMouse::create();
 
-    mouseListener->onMouseMove = CC_CALLBACK_1(HelloWorld::onMouseMove, this);
-    mouseListener->onMouseDown = CC_CALLBACK_1(HelloWorld::onMouseDown, this);
+    mouseListener->onMouseMove 
+        = CC_CALLBACK_1(HelloWorld::onMouseMove, this);
+    mouseListener->onMouseDown
+        = CC_CALLBACK_1(HelloWorld::onMouseDown, this);
 
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
+    _eventDispatcher->
+        addEventListenerWithSceneGraphPriority(mouseListener, this);
 
     scheduleUpdate();
 
     backgroundPtr = Sprite::create("bkg.png");
-    backgroundPtr->setPosition(0, 0);
+
     this->addChild(backgroundPtr, 1);
+
+    SetAllPositions();
 
     return true;
 }
@@ -87,20 +92,45 @@ void HelloWorld::onMouseMove(cocos2d::Event* event)
 void HelloWorld::onMouseDown(cocos2d::Event* event)
 {
     GameSingleton::getInstance().getState().reset();
-
     SetAllPositions();
 }
 
 void HelloWorld::update(float delta)
 {
-    // GameSingleton::getInstance().getState().bkgPos.x = GameSingleton::getInstance().getState().bkgPos.x - 80 * delta;
-
-    GameSingleton::getInstance().getState().moveBkg(80*delta);
+    GameSingleton::getInstance().getState().moveBkg(80 * delta);
+    GameSingleton::getInstance().getState().moveObjectPos(200 * delta);
 
     SetAllPositions();
+
+    objectTimer += delta;
+
+    if (objectTimer > 2.0)
+    {
+        objectTimer = objectTimer - 2.0;
+
+        Vec2 pos = Vec2{ 1400.f, (float)(rand() % 500)};
+
+        // Create asteroid here
+        GameSingleton::getInstance()
+            .getState()
+            .objectPos.push_back(pos);
+
+        Sprite* newObject = Sprite::create("asteroid.png");
+        newObject->setPosition(pos);
+        addChild(newObject, 3);
+        objectPtr.push_back(newObject);
+    }
 }
 
-void HelloWorld::SetAllPositions(){
+void HelloWorld::SetAllPositions()
+{
     shipPtr->setPosition(GameSingleton::getInstance().getState().shipPos);
     backgroundPtr->setPosition(GameSingleton::getInstance().getState().bkgPos);
+
+    for (int i = 0; i < objectPtr.size(); i++)
+    {
+        auto position = GameSingleton::getInstance().getState().objectPos[i];
+        objectPtr[i]->setPosition(position);
+    }
 }
+
